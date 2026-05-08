@@ -83,7 +83,7 @@ namespace WaveProject.Station
             SendData();
         }
         
-        private void ToggleEnabling(bool value)
+        public void ToggleEnabling(bool value)
         {
             _isEnable = value;
             

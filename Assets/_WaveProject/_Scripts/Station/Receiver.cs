@@ -92,7 +92,7 @@ namespace WaveProject.Station
             _speedToTarget = InteractionSettings.Data.ReceiverArrowSpeedToTarget;
         }
 
-        private void TogglePower(bool value)
+        public void TogglePower(bool value)
         {
             _isEnable = value;
 
@@ -105,7 +105,7 @@ namespace WaveProject.Station
             else _powerZeroOffsetMeshRenderer.material.DisableKeyword("_EMISSION");
         }
 
-        private void ToggleZeroSetter(bool value)
+        public void ToggleZeroSetter(bool value)
         {
             _isZeroOffset = value;
 

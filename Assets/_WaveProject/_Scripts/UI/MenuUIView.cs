@@ -214,6 +214,9 @@ namespace WaveProject.UI
         private  void BackToMenu()
         {
             //DOTween.KillAll();
+            var vrSwitch = FindObjectOfType<VR_Switch>();
+            if (vrSwitch != null)
+                vrSwitch.SwitchToMainMenu();
             SceneManager.LoadScene("MainMenu");
         }
     }
