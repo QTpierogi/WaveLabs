@@ -46,15 +46,12 @@ namespace WaveProject.Interaction
 
         public virtual void Select()
         {
-            //Outline.enabled = true;
             var baseColor = Outline.OutlineColor;
             Outline.OutlineColor = new Color(baseColor.r, Outline.OutlineColor.g, Outline.OutlineColor.b, 1.0f);
         }
 
         public virtual void Deselect()
         {
-            //Outline.enabled = false;
-
             var baseColor = Outline.OutlineColor;
             Outline.OutlineColor = new Color(baseColor.r, Outline.OutlineColor.g, Outline.OutlineColor.b, 0.35f);
         }

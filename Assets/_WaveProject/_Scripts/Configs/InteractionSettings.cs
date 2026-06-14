@@ -21,12 +21,19 @@ namespace WaveProject.Configs
         [field: SerializeField] public float MaxPower { get; private set; } = 100;
         [field: Min(0.01f), SerializeField] public float PowerStep { get; private set; } = 1.5f;
         [field: Min(0.01f), SerializeField] public float FrequencyStep { get; private set; } = 1.5f;
+        [field: Min(0.01f), SerializeField] public float WeakeningStep { get; private set; } = 1.0f;
 
         [field:Header("Receiver")]
         [field: SerializeField] public float MaxReceiverScaleFactor { get; private set; } = 5;
-        [field: SerializeField] public float MinZeroOffsetFactor { get; private set; } = -5;
+        [field: SerializeField] public float MaxReceiverMultiplierFactor { get; private set; } = 100;
+        [field: SerializeField] public float MinZeroOffsetFactor { get; private set; } = 0;
+        [field: SerializeField] public float StartZeroOffsetFactor { get; private set; } = 4;
         [field: SerializeField] public float MaxZeroOffsetFactor { get; private set; } = 15;
         [field: SerializeField] public float ReceiverArrowSpeedToTarget { get; private set; } = 2;
+
+        [field: Header("Power Unit")]
+        [field: SerializeField] public float MaxElectricPower { get; private set; } = 1f;
+        [field: SerializeField] public float ElectricPowerStep { get; private set; } = 1f;
         
         // внутрянняя ширина волновода в метрах
         public const float INTERNAL_WAVEGUIDE_WIDTH = 0.023f; 
@@ -36,6 +43,8 @@ namespace WaveProject.Configs
         
         public const float MIH_FREQUENCY = 7500;
         public const float MAX_FREQUENCY = 10500;
+        public const float MIN_WEAKENING = 20;
+        public const float MAX_WEAKENING = 80;
 
         
         private static InteractionSettings _instance;

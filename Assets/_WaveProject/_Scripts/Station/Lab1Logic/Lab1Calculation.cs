@@ -25,7 +25,7 @@ namespace WaveProject
             
         }
 
-        public override float CalculateValue(float defaultScaleFactor, float PowerFactor, float Frequency)
+        public override float CalculateValue(float PowerFactor, float Frequency)
         {
             waveLength = waveSpeed / Utils.MHzToHz(Frequency);
 
@@ -59,9 +59,9 @@ namespace WaveProject
                 }
             }
 
-            var value = defaultScaleFactor * PowerFactor * fX * fZ;
+            var value = PowerFactor * fX * fZ;
 
-            return value * value * 100;
+            return value * value;
         }
 
         public void SendX(float x)

@@ -19,7 +19,7 @@ namespace WaveProject.Station.PlateLogic.Plates
             var r = GetEllipticityCoefficient(variantWavelength);
 
             var cosOfAngle = Math.Cos(angleInRadians - betta);
-            return Math.Pow(Math.Abs(cosOfAngle) * (1 - r) + r, 2) * 100;
+            return Math.Pow(Math.Abs(cosOfAngle) * (1 - r) + r, 2) ;
         }
         
         private double GetWavelength01(double variantWavelength)

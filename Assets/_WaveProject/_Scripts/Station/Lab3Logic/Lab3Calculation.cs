@@ -21,7 +21,7 @@ namespace WaveProject
             _phaseShiftPlate = new EmptyPhaseShiftPlate(0, 0);
         }
 
-        public override float CalculateValue(float defaultScaleFactor, float PowerFactor, float Frequency)
+        public override float CalculateValue(float PowerFactor, float Frequency)
         {
             var distanceFactor = _receivingAntenna.GetAntennasDistanceFactor();
             var powerFactor = PowerFactor;
@@ -34,7 +34,7 @@ namespace WaveProject
             var variantWavelength = _phaseShiftPlate.GetVariantWavelength(Utils.MHzToHz(frequency));
             var receiverSignalLevel = _phaseShiftPlate.GetReceiverSignalLevel(angleInRadians, variantWavelength);
 
-            value = defaultScaleFactor * distanceFactor * powerFactor * receiverSignalLevel;
+            value = distanceFactor * powerFactor * receiverSignalLevel;
 
             return (float)value;
         }

@@ -12,11 +12,13 @@ namespace WaveProject.Station
 {
     public class Receiver : MonoBehaviour
     {
-        [Min(0), SerializeField] private float _defaultScaleFactor = 1;
+        [Min(0), SerializeField] public float _defaultScaleFactor = 1;
+        [Min(0), SerializeField] private float _defaultMultiplierFactor = 1;
+        [SerializeField] private StateRotateInteractable _scaleMultiplierHandle;
         [SerializeField] private RotateInteractable _scaleFactorHandle;
         [SerializeField] private RotateInteractable _zeroOffsetHandle;
         [SerializeField] private Switcher _zeroSwitcher;
-        [SerializeField] private Toggle _powerSwitcher;
+        [SerializeField] private Switcher _powerSwitcher;
         [SerializeField] private MeshRenderer _powerMeshRenderer;
         [SerializeField] private MeshRenderer _powerZeroOffsetMeshRenderer;
 
@@ -33,13 +35,16 @@ namespace WaveProject.Station
 
         private float _maxScaleFactor;
 
+        private float _maxMultiplierFactor;
         public float PowerFactor { get; private set; }
         public float Frequency { get; private set; }
 
+        private float _startZeroOffsetFactor;
         private float _minZeroOffsetFactor;
         private float _maxZeroOffsetFactor;
 
         private bool _isEnable;
+        private bool _multiplierIsEnabled;
 
         private bool _isZeroOffset;
         private float _zeroOffset;
@@ -53,9 +58,14 @@ namespace WaveProject.Station
             {
                 _defaultScaleFactor = InteractionSettings.Data.MaxReceiverScaleFactor;
             }
+
+            if (_defaultMultiplierFactor > InteractionSettings.Data.MaxReceiverMultiplierFactor)
+            {
+                _defaultMultiplierFactor = InteractionSettings.Data.MaxReceiverMultiplierFactor;
+            }
         }
 
-        public void Init()
+        public void Init(bool useExtraHandles)
         {
             const bool defaultZeroSetter = false;
             const bool defaultPower = false;
@@ -63,10 +73,17 @@ namespace WaveProject.Station
             LoadData();
             StartCoroutine(AimForResultValue());
 
-            _zeroOffset = Random.Range(_minZeroOffsetFactor, _maxZeroOffsetFactor);
+            _zeroOffset = Random.Range(_startZeroOffsetFactor, _maxZeroOffsetFactor);
 
             _scaleFactorHandle.Init();
             _scaleFactorHandle.SetDefaultValue(_defaultScaleFactor, 0, _maxScaleFactor);
+
+            if(useExtraHandles)
+            {
+                _multiplierIsEnabled = true;
+                _scaleMultiplierHandle.Init();
+                _scaleMultiplierHandle.SetDefaultValue(_defaultMultiplierFactor);
+            }
 
             _zeroOffsetHandle.Init();
             _zeroOffsetHandle.SetDefaultValue(_zeroOffset, _minZeroOffsetFactor, _maxZeroOffsetFactor);
@@ -87,8 +104,10 @@ namespace WaveProject.Station
         private void LoadData()
         {
             _maxScaleFactor = InteractionSettings.Data.MaxReceiverScaleFactor;
+            _startZeroOffsetFactor = InteractionSettings.Data.StartZeroOffsetFactor;
             _minZeroOffsetFactor = InteractionSettings.Data.MinZeroOffsetFactor;
             _maxZeroOffsetFactor = InteractionSettings.Data.MaxZeroOffsetFactor;
+            _maxMultiplierFactor = InteractionSettings.Data.MaxReceiverMultiplierFactor;
             _speedToTarget = InteractionSettings.Data.ReceiverArrowSpeedToTarget;
         }
 
@@ -134,8 +153,10 @@ namespace WaveProject.Station
             if (_isEnable == false || Frequency == 0) return;
             
             _defaultScaleFactor = _scaleFactorHandle.GetValue();
-            var value = calculator.CalculateValue(_defaultScaleFactor, PowerFactor, Frequency);
-            _result = value;
+            if (_multiplierIsEnabled)
+                _defaultScaleFactor /= _scaleMultiplierHandle.GetValue();
+            var value = calculator.CalculateValue(PowerFactor, Frequency);
+            _result = value * _defaultScaleFactor * 100;
         }
 
         private IEnumerator AimForResultValue()

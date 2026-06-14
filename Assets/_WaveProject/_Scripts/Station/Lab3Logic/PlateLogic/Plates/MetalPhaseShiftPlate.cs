@@ -14,7 +14,7 @@ namespace WaveProject.Station.PlateLogic.Plates
             var r = GetEllipticityCoefficient(variantWavelength);
 
             var cosOfAngle = Math.Cos(angleInRadians - betta);
-            return Math.Pow(Math.Abs(cosOfAngle) * (1 - r) + r, 2) * 100;
+            return Math.Pow(Math.Abs(cosOfAngle) * (1 - r) + r, 2);
         }
 
         private double GetWavelength10(double variantWavelength)
@@ -48,12 +48,12 @@ namespace WaveProject.Station.PlateLogic.Plates
             var shift = GetPhaseShift(variantWavelength);
             
             var absSinOfShift = Math.Abs(Math.Sin(shift));
-            var powSinOfShift = Math.Pow(Math.Cos(shift), 2);
+            var powCosOfShift = Math.Pow(Math.Cos(shift), 2);
 
             var aPow4 = Math.Pow(a, 4);
 
             return (2*a * absSinOfShift) /
-                   (a*a + 1 + Math.Sqrt(aPow4 - 2 * a*a + 1 + 4*a*a * powSinOfShift));
+                   (a*a + 1 + Math.Sqrt(aPow4 - 2 * a*a + 1 + 4*a*a * powCosOfShift));
         }
 
         private double GetPhaseShift(double variantWavelength)
@@ -78,7 +78,7 @@ namespace WaveProject.Station.PlateLogic.Plates
 
             var pow = Math.Pow(variantWavelength / 2 * (a - PlateThickness), 2);
             
-            pow = Math.Clamp(pow, 0, .99999999999d); //TODO: may be wrong
+            //pow = Math.Clamp(pow, 0, .99999999999d);
             
             var sqrt = Math.Sqrt(1 - pow);
             return variantWavelength / sqrt;
@@ -130,7 +130,7 @@ namespace WaveProject.Station.PlateLogic.Plates
 
             var pow = Math.Pow(variantWavelength / (2 * (a - PlateThickness)), 2);
 
-            pow = Math.Clamp(pow, 0, .99999999999d); //TODO: may be wrong
+            //pow = Math.Clamp(pow, 0, .99999999999d);
             
             var sqrt = Math.Sqrt(1 - pow);
             

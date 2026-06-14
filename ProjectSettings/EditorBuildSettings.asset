@@ -17,6 +17,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/_WaveProject/_Scenes/Lab3.unity
     guid: 99c9720ab356a0642a771bea13969a05
+  - enabled: 1
+    path: Assets/_WaveProject/_Scenes/Lab4.unity
+    guid: 49d13e39b7b5227458ac4e52847f55d5
   m_configObjects:
     com.unity.xr.management.loader_settings: {fileID: 11400000, guid: 7716e64eca3e2624a98bdb9f1eb5b383,
       type: 2}

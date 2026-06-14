@@ -20,6 +20,9 @@ namespace WaveProject
         [SerializeField] private CarriageStation _carriageStation;
         [SerializeField] private InsertableWaveguidesController _insertableWaveguidesController;
         [SerializeField] private RotatableStation _rotatableStation;
+        [SerializeField] private PowerUnit _powerUnit;
+
+        private bool useExtraHandles = false;
 
         private void Awake()
         {
@@ -34,8 +37,15 @@ namespace WaveProject
             
             ServiceManager.TryAddService(input);
 
-            _generator.Init();
-            _receiver.Init();
+            if (_powerUnit != null)
+            {
+                _powerUnit.Init();
+                useExtraHandles = true;
+
+            }
+            else useExtraHandles = false;
+            _generator.Init(useExtraHandles);
+            _receiver.Init(useExtraHandles);
             if(_receivingAntenna!=null)_receivingAntenna.Init();
             if(_plateGenerator!=null)_plateGenerator.Init();
             if(_carriageStation!=null)_carriageStation.Init();

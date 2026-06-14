@@ -8,6 +8,6 @@ namespace WaveProject
     {
         public abstract void Init();
 
-        public abstract float CalculateValue(float defaultScaleFactor, float PowerFactor, float Frequency);
+        public abstract float CalculateValue(float PowerFactor, float Frequency);
     }
 }

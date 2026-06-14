@@ -18,8 +18,11 @@ MonoBehaviour:
   <FovChangingSpeed>k__BackingField: 25
   <FovSensitivity>k__BackingField: 3
   <CameraMoveSpeed>k__BackingField: 2
-  <MaxFrequency>k__BackingField: 10000
   <MaxPower>k__BackingField: 100
   <PowerStep>k__BackingField: 5
   <FrequencyStep>k__BackingField: 10
-  <DeviationRange>k__BackingField: 0.05
+  <MaxReceiverScaleFactor>k__BackingField: 2
+  <MinZeroOffsetFactor>k__BackingField: 0
+  <StartZeroOffsetFactor>k__BackingField: 4
+  <MaxZeroOffsetFactor>k__BackingField: 15
+  <ReceiverArrowSpeedToTarget>k__BackingField: 2

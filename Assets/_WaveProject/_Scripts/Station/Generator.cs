@@ -13,6 +13,11 @@ namespace WaveProject.Station
         [SerializeField] private RotateInteractable _frequencyHandle;
         [SerializeField] private TMP_Text _textFrequency;
 
+        [Header("DB weakening settings")]
+        [Min(0), SerializeField] private float _defaultDBWeakening = 30f;
+        [SerializeField] private RotateInteractable _DBWeakeningHandle;
+        [SerializeField] private TMP_Text _textDBWeakening;
+
         [Header("Power settings")] 
         [Min(0), SerializeField] private float _defaultPower = 10;
         [SerializeField] private Toggle _powerToggle;
@@ -26,11 +31,17 @@ namespace WaveProject.Station
         private float _maxFrequency;
         private float _frequencyStep;
         private float _currentFrequency;
-        
+
+        private float _minDBWeakening;
+        private float _maxDBWeakening;
+        private float _DBWeakeningStep;
+        private float _currentDBWeakening;
+
         private float _maxPower;
         private float _powerStep;
         private float _currentPower;
         private bool _isEnable;
+        private bool DBhandleIsActive = false;
 
         public bool IsEnable => _isEnable;
 
@@ -47,31 +58,45 @@ namespace WaveProject.Station
             }
         }
 
-        public void Init()
+        public void Init(bool useExtraHandles)
         {
             const bool defaultPower = false;
             
             LoadData();
             
             _frequencyHandle.Init();
-            _frequencyHandle.SetDefaultValue(_defaultFrequency, _minFrequency, _maxFrequency);
+            _frequencyHandle.SetDefaultValue(_defaultFrequency, _minFrequency, _maxFrequency);           
             
-            _powerHandle.Init();
-            _powerHandle.SetDefaultValue(_defaultPower, 0, _maxPower);
             
             _powerToggle.Init();
             _powerToggle.SetDefaultToggledState(defaultPower);
             _powerToggle.Toggled.AddListener(ToggleEnabling);
             ToggleEnabling(defaultPower);
+
+            if(useExtraHandles)
+            {
+                DBhandleIsActive = true;
+                _DBWeakeningHandle.Init();
+                _DBWeakeningHandle.SetDefaultValue(20, _minDBWeakening, _maxDBWeakening);
+            }
+            else
+            {
+                _powerHandle.Init();
+                _powerHandle.SetDefaultValue(_defaultPower, 0, _maxPower);
+            }
         }
 
         private void LoadData()
         {
             _maxFrequency = InteractionSettings.MAX_FREQUENCY;
             _minFrequency = InteractionSettings.MIH_FREQUENCY;
-            
+
+            _minDBWeakening = InteractionSettings.MIN_WEAKENING;
+            _maxDBWeakening = InteractionSettings.MAX_WEAKENING;
+
             _maxPower = InteractionSettings.Data.MaxPower;
             _frequencyStep = InteractionSettings.Data.FrequencyStep;
+            _DBWeakeningStep = InteractionSettings.Data.WeakeningStep;
             _powerStep = InteractionSettings.Data.PowerStep;
         }
 
@@ -79,6 +104,7 @@ namespace WaveProject.Station
         {
             _currentFrequency = IsEnable ? Utils.RoundToIncrement(_frequencyHandle.GetValue(), _frequencyStep) : 0;
             _currentPower = IsEnable ? Utils.RoundToIncrement(_powerHandle.GetValue(), _powerStep) : 0;
+            _currentDBWeakening = IsEnable ? Utils.RoundToIncrement(_DBWeakeningHandle.GetValue(), _DBWeakeningStep) : 0;
             
             SendData();
         }
@@ -95,9 +121,12 @@ namespace WaveProject.Station
         private void SendData()
         {
             _textFrequency.text = $"{Mathf.Round(_currentFrequency)}";
+            _textDBWeakening.text = $"{Mathf.Round(_currentDBWeakening)}";
 
             _receiver.SendFrequency(_currentFrequency);
-            _receiver.SendPowerFactor(_currentPower / (_maxPower * 0.5f));
+            if (DBhandleIsActive)
+                _receiver.SendPowerFactor(_currentDBWeakening);
+            else _receiver.SendPowerFactor(_currentPower * 2 / (_maxPower));
         }
     }
 }

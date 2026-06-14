@@ -22,13 +22,19 @@ namespace WaveProject.Utility
             return Quaternion.Euler(rotationAxis * clampedRotation);
         }
 
+        public static Quaternion GetRotationForState(float currentState, float stateAngle, Vector3 rotationAxis)
+        {
+            var angle = stateAngle + stateAngle * 2 * currentState - 90;
+            return Quaternion.Euler(rotationAxis * angle);
+        }
+
         public static float GetValueByRotationInRange(Quaternion rotation, float minAngleRange,
             float maxAngleRange, float to1, float to2, Vector3 rotationAxis)
         {
             rotation.eulerAngles.Scale(rotationAxis);
-
+            //var angle = 0f;
+            //rotation.ToAngleAxis(out angle, out rotationAxis);
             var eulerAngle = rotation.eulerAngles.magnitude;
-            
             if (eulerAngle > 180f)
             {
                 eulerAngle -= 360f;
